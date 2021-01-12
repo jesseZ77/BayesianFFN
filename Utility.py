@@ -16,8 +16,8 @@ def generate_linear_data(N=500, input_size=4, input_sd=1, output_size=1, output_
 
 
 def gd(model, X, y, epochs):
+    """Train neural network using Adam. """
     optimizer = torch.optim.Adam(model.parameters())
-    # optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.01)
 
     losses = []
     criterion = nn.MSELoss()
@@ -36,6 +36,14 @@ def gd(model, X, y, epochs):
 
 
 def generate_samples(dict_of_samplers, dict_of_algo, X, y, samples, seed=1234):
+    """
+    Generates samples from a number of samplers
+
+    Parameters:
+        dict_of_samplers - dictionary of RegressionSampler classes
+
+        dict_of_algo - dictionary indicating which algorithm to use (rw or lg), keys must match dict_of_samplers
+    """
     torch.manual_seed(seed)
     np.random.seed(seed)
 
@@ -60,6 +68,16 @@ def generate_samples(dict_of_samplers, dict_of_algo, X, y, samples, seed=1234):
 
 
 def display_results(dict_of_samplers, burn_in, X, y, base_model):
+    """
+    Plots sample results from a number of samplers. This includes final acceptance rate/ loss, rolling average
+    acceptance rate, tausq trace and distribution, parameter (weights and biases) trace and distribution and
+    prediction (train data) trace and distribution
+
+    Parameters:
+        dict_of_samplers - dictionary of RegressionSampler classes that already have sample generated (ie. using the
+        generate_samples function)
+
+    """
     # print losses, final acceptance rates
     for name, sampler in dict_of_samplers.items():
         final_acceptance_rate = sum([w[-1] for w in sampler.container.data]) / len(sampler.container.data)
