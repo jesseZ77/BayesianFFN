@@ -126,8 +126,7 @@ class RegressionSampler:
         self.container.append(
             deepcopy(self.model.base_model.state_dict()), deepcopy(self.model.tausq),
             deepcopy(y_pred), deepcopy(loss.item()), accept)
-
-        return loss.item()
+        
 
     def compute_gradient_update(self, X, y, w, tausq):
         self.model.set_params(deepcopy(w))
